@@ -2,6 +2,7 @@
 // Created by 彭金飞 on 5/2/18.
 //
 #include <stdio.h>
+#include <memory.h>
 
 typedef unsigned char *byte_pointer;
 
@@ -22,6 +23,10 @@ void show_float(float x){
 
 void show_pointer(void *x){
     show_bytes((byte_pointer) &x, sizeof(void *));
+}
+
+void show_chars(char *s){
+    show_bytes((byte_pointer) s, strlen(s));
 }
 
 void test_show_bytes(int val){
