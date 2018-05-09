@@ -9,6 +9,7 @@ extern void show_int(int x);
 extern void show_float(float x);
 extern void show_pointer(void *x);
 extern void show_chars(char *s);
+extern void show_short(short x);
 extern void test_show_bytes(int x);
 
 extern int bool_or(int x,int m);
