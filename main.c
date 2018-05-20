@@ -44,6 +44,14 @@ int main() {
     printf("logicalShift(0x%08x,%d) = 0x%08x\n", 0x87654321,4,logicalShift(0x87654321,4));
     printf("logicalShift(0x%08x,%d) = 0x%08x\n", 0x87654321,8,logicalShift(0x87654321,8));
     printf("logicalShift(0x%08x,%d) = 0x%08x\n", 0x87654321,8,logicalShift(0x87654321,31));
+
+    printf("bitCount(%d) =  %d\n", 8, bitCount(8));
+    printf("bitCount(%d) =  %d\n", -1, bitCount(-1));
+    printf("bitCount(%d) =  %d\n", -8, bitCount(-8));
+    printf("bitCount(%d) =  %d\n", 1, bitCount(1));
+    printf("bitCount(%d) =  %d\n", 0, bitCount(0));
+    int min = -2147483647 - 1;
+    printf("bitCount(%d) =  %d\n", min, bitCount(min));
     return 0;
 }
 

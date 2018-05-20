@@ -172,7 +172,24 @@ int logicalShift(int x, int n) {
  *   Rating: 4
  */
 int bitCount(int x) {
-  return 2;
+  int bisect=0x55;
+  bisect += bisect << 8;
+  bisect += bisect << 16;
+  int res = (x & bisect) + ((x >> 1) & bisect);
+  int aggre2 = 0x33;
+  aggre2 += aggre2 << 8;
+  aggre2 += aggre2 << 16;
+  res = (res & aggre2) + ((res >> 2) & aggre2);
+  int aggre4 = 0x0F;
+  aggre4 += aggre4 << 8;
+  aggre4 += aggre4 << 16;
+  res = (res & aggre4) + ((res >> 4) & aggre4);
+  int aggre8 = 0xFF;
+  aggre8 += aggre8 << 16;
+  res = (res & aggre8) + ((res >> 8) & aggre8);
+  int aggre16 = 0xFF << 8 + 0xFF;
+  res = (res & aggre16) + ((res >> 16) & aggre16);
+  return res;
 }
 /* 
  * bang - Compute !x without using !
@@ -202,6 +219,7 @@ int tmin(void) {
  *   Max ops: 15
  *   Rating: 2
  */
+//
 int fitsBits(int x, int n) {
   return 2;
 }
@@ -213,6 +231,7 @@ int fitsBits(int x, int n) {
  *   Max ops: 15
  *   Rating: 2
  */
+// 使用符号位生成偏移量
 int divpwr2(int x, int n) {
     return 2;
 }
