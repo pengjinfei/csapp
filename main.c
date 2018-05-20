@@ -73,6 +73,11 @@ int main() {
     printf("divpwr2(%d,%d) = %d\n", 1, 1, isLessOrEqual(1, 1));
     printf("divpwr2(%d,%d) = %d\n", 0, -1, isLessOrEqual(0, -1));
     printf("divpwr2(%d,%d) = %d\n", -1, 1, isLessOrEqual(-1, 1));
+
+    printf("bang(%d) = %d\n", 1, bang(1));
+    printf("bang(%d) = %d\n", 0, bang(0));
+    printf("bang(%d) = %d\n", -1, bang(-1));
+
     return 0;
 }
 
