@@ -131,7 +131,8 @@ NOTES:
 
 
 #endif
-/* 
+
+/*
  * bitAnd - x&y using only ~ and | 
  *   Example: bitAnd(6, 5) = 4
  *   Legal ops: ~ |
@@ -139,9 +140,10 @@ NOTES:
  *   Rating: 1
  */
 int bitAnd(int x, int y) {
-  return ~((~x) | (~y));
+    return ~((~x) | (~y));
 }
-/* 
+
+/*
  * getByte - Extract byte n from word x
  *   Bytes numbered from 0 (LSB) to 3 (MSB)
  *   Examples: getByte(0x12345678,1) = 0x56
@@ -150,10 +152,11 @@ int bitAnd(int x, int y) {
  *   Rating: 2
  */
 int getByte(int x, int n) {
-  return (x>>(n*8))&0xFF;
+    return (x >> (n * 8)) & 0xFF;
 
 }
-/* 
+
+/*
  * logicalShift - shift x to the right by n, using a logical shift
  *   Can assume that 0 <= n <= 31
  *   Examples: logicalShift(0x87654321,4) = 0x08765432
@@ -162,8 +165,9 @@ int getByte(int x, int n) {
  *   Rating: 3 
  */
 int logicalShift(int x, int n) {
-  return (x>>n)&(~((~0)<<1<<(31-n)));
+    return (x >> n) & (~((~0) << 1 << (31 - n)));
 }
+
 /*
  * bitCount - returns count of number of 1's in word
  *   Examples: bitCount(5) = 2, bitCount(7) = 3
@@ -172,26 +176,27 @@ int logicalShift(int x, int n) {
  *   Rating: 4
  */
 int bitCount(int x) {
-  int bisect=0x55;
-  bisect += bisect << 8;
-  bisect += bisect << 16;
-  int res = (x & bisect) + ((x >> 1) & bisect);
-  int aggre2 = 0x33;
-  aggre2 += aggre2 << 8;
-  aggre2 += aggre2 << 16;
-  res = (res & aggre2) + ((res >> 2) & aggre2);
-  int aggre4 = 0x0F;
-  aggre4 += aggre4 << 8;
-  aggre4 += aggre4 << 16;
-  res = (res & aggre4) + ((res >> 4) & aggre4);
-  int aggre8 = 0xFF;
-  aggre8 += aggre8 << 16;
-  res = (res & aggre8) + ((res >> 8) & aggre8);
-  int aggre16 = 0xFF << 8 + 0xFF;
-  res = (res & aggre16) + ((res >> 16) & aggre16);
-  return res;
+    int bisect = 0x55;
+    bisect += bisect << 8;
+    bisect += bisect << 16;
+    int res = (x & bisect) + ((x >> 1) & bisect);
+    int aggre2 = 0x33;
+    aggre2 += aggre2 << 8;
+    aggre2 += aggre2 << 16;
+    res = (res & aggre2) + ((res >> 2) & aggre2);
+    int aggre4 = 0x0F;
+    aggre4 += aggre4 << 8;
+    aggre4 += aggre4 << 16;
+    res = (res & aggre4) + ((res >> 4) & aggre4);
+    int aggre8 = 0xFF;
+    aggre8 += aggre8 << 16;
+    res = (res & aggre8) + ((res >> 8) & aggre8);
+    int aggre16 = 0xFF << 8 + 0xFF;
+    res = (res & aggre16) + ((res >> 16) & aggre16);
+    return res;
 }
-/* 
+
+/*
  * bang - Compute !x without using !
  *   Examples: bang(3) = 0, bang(0) = 1
  *   Legal ops: ~ & ^ | + << >>
@@ -199,16 +204,17 @@ int bitCount(int x) {
  *   Rating: 4 
  */
 int bang(int x) {
-  return 2;
+    return 2;
 }
-/* 
+
+/*
  * tmin - return minimum two's complement integer 
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 4
  *   Rating: 1
  */
 int tmin(void) {
-  return 2;
+    return (1 << 30) << 1;
 }
 /* 
  * fitsBits - return 1 if x can be represented as an 
@@ -219,11 +225,14 @@ int tmin(void) {
  *   Max ops: 15
  *   Rating: 2
  */
-//
+// 使用符号位生成偏移量
 int fitsBits(int x, int n) {
-  return 2;
+    int sign = x >> 31;
+    n = n - !!sign;
+    return !((x >> n) ^ sign);
 }
-/* 
+
+/*
  * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
  *  Round toward zero
  *   Examples: divpwr2(15,1) = 7, divpwr2(-33,4) = -2
@@ -231,11 +240,11 @@ int fitsBits(int x, int n) {
  *   Max ops: 15
  *   Rating: 2
  */
-// 使用符号位生成偏移量
 int divpwr2(int x, int n) {
     return 2;
 }
-/* 
+
+/*
  * negate - return -x 
  *   Example: negate(1) = -1.
  *   Legal ops: ! ~ & ^ | + << >>
@@ -243,9 +252,10 @@ int divpwr2(int x, int n) {
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+    return ~x + 1;
 }
-/* 
+
+/*
  * isPositive - return 1 if x > 0, return 0 otherwise 
  *   Example: isPositive(-1) = 0.
  *   Legal ops: ! ~ & ^ | + << >>
@@ -253,9 +263,10 @@ int negate(int x) {
  *   Rating: 3
  */
 int isPositive(int x) {
-  return 2;
+    return 2;
 }
-/* 
+
+/*
  * isLessOrEqual - if x <= y  then return 1, else return 0 
  *   Example: isLessOrEqual(4,5) = 1.
  *   Legal ops: ! ~ & ^ | + << >>
@@ -263,8 +274,9 @@ int isPositive(int x) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-  return 2;
+    return 2;
 }
+
 /*
  * ilog2 - return floor(log base 2 of x), where x > 0
  *   Example: ilog2(16) = 4
@@ -273,9 +285,10 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4
  */
 int ilog2(int x) {
-  return 2;
+    return 2;
 }
-/* 
+
+/*
  * float_neg - Return bit-level equivalent of expression -f for
  *   floating point argument f.
  *   Both the argument and result are passed as unsigned int's, but
@@ -287,9 +300,10 @@ int ilog2(int x) {
  *   Rating: 2
  */
 unsigned float_neg(unsigned uf) {
- return 2;
+    return 2;
 }
-/* 
+
+/*
  * float_i2f - Return bit-level equivalent of expression (float) x
  *   Result is returned as unsigned int, but
  *   it is to be interpreted as the bit-level representation of a
@@ -299,9 +313,10 @@ unsigned float_neg(unsigned uf) {
  *   Rating: 4
  */
 unsigned float_i2f(int x) {
-  return 2;
+    return 2;
 }
-/* 
+
+/*
  * float_twice - Return bit-level equivalent of expression 2*f for
  *   floating point argument f.
  *   Both the argument and result are passed as unsigned int's, but
@@ -313,5 +328,5 @@ unsigned float_i2f(int x) {
  *   Rating: 4
  */
 unsigned float_twice(unsigned uf) {
-  return 2;
+    return 2;
 }
