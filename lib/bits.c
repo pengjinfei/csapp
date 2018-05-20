@@ -228,7 +228,7 @@ int tmin(void) {
 // 使用符号位生成偏移量
 int fitsBits(int x, int n) {
     int sign = x >> 31;
-    n = n - !!sign;
+    n = n + sign;
     return !((x >> n) ^ sign);
 }
 
@@ -241,7 +241,9 @@ int fitsBits(int x, int n) {
  *   Rating: 2
  */
 int divpwr2(int x, int n) {
-    return 2;
+    int sign = x >> 31;
+    int mask = (1 << n) + (~0);
+    return (x + (sign& mask)) >> n;
 }
 
 /*
@@ -263,7 +265,7 @@ int negate(int x) {
  *   Rating: 3
  */
 int isPositive(int x) {
-    return 2;
+    return (!(x >> 31)) & (!!x);
 }
 
 /*
@@ -274,7 +276,10 @@ int isPositive(int x) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-    return 2;
+    int signx = x >> 31;
+    int negx = (~(x + signx)) + !signx;
+    int sub = y + negx;
+    return !(sub >> 31);
 }
 
 /*
