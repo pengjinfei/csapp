@@ -43,7 +43,7 @@ int main() {
     printf("logicalShift(0x%08x,%d) = 0x%08x\n", 0x87654321, 3, logicalShift(0x87654321, 3));
     printf("logicalShift(0x%08x,%d) = 0x%08x\n", 0x87654321, 4, logicalShift(0x87654321, 4));
     printf("logicalShift(0x%08x,%d) = 0x%08x\n", 0x87654321, 8, logicalShift(0x87654321, 8));
-    printf("logicalShift(0x%08x,%d) = 0x%08x\n", 0x87654321, 8, logicalShift(0x87654321, 31));
+    printf("logicalShift(0x%08x,%d) = 0x%08x\n", 0x87654321, 31, logicalShift(0x87654321, 31));
 
     printf("bitCount(%d) =  %d\n", 8, bitCount(8));
     printf("bitCount(%d) =  %d\n", -1, bitCount(-1));

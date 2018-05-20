@@ -165,7 +165,7 @@ int getByte(int x, int n) {
  *   Rating: 3 
  */
 int logicalShift(int x, int n) {
-    return (x >> n) & (~((~0) << 1 << (31 - n)));
+    return (x >> n) & (~((~0) << 1 << (32 + ~n)));
 }
 
 /*
