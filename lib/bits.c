@@ -214,7 +214,7 @@ int bang(int x) {
  *   Rating: 1
  */
 int tmin(void) {
-    return (1 << 30) << 1;
+    return 1<< 31;
 }
 /* 
  * fitsBits - return 1 if x can be represented as an 
@@ -254,7 +254,7 @@ int divpwr2(int x, int n) {
  *   Rating: 2
  */
 int negate(int x) {
-    return ~x + 1;
+    return (~x) + 1;
 }
 
 /*
@@ -290,11 +290,17 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4
  */
 int ilog2(int x) {
-    return 2;
+    int res = 0;
+    res = (!!(x >> 16)) << 4;
+    res = res + ((!!(x >> (res + 8))) << 3);
+    res = res + ((!!(x >> (res + 4))) << 2);
+    res = res + ((!!(x >> (res + 2))) << 1);
+    res = res + (((x >> res) & 3)>>1);
+    return res;
 }
 
 /*
- * float_neg - Return bit-level equivalent of expression -f for
+ * float_neg - Return bit-level equivalent of expression -f  for
  *   floating point argument f.
  *   Both the argument and result are passed as unsigned int's, but
  *   they are to be interpreted as the bit-level representations of

@@ -51,7 +51,7 @@ int main() {
     printf("bitCount(%d) =  %d\n", 1, bitCount(1));
     printf("bitCount(%d) =  %d\n", 0, bitCount(0));
     int min = -2147483647 - 1;
-    printf("bitCount(%d) =  %d\n", min, bitCount(min));
+    printf("bitCount(%d) =  %d\n", 0x80000000, bitCount(0x80000000));
 
     printf("fitsBits(%d,%d) = %d\n", 4, 3, fitsBits(4, 3));
     printf("fitsBits(%d,%d) = %d\n", 5, 3, fitsBits(5, 3));
@@ -78,6 +78,13 @@ int main() {
     printf("bang(%d) = %d\n", 0, bang(0));
     printf("bang(%d) = %d\n", -1, bang(-1));
 
+    printf("ilog2(%d) = %d\n", 0, ilog2(0));
+    printf("ilog2(%d) = %d\n", 1, ilog2(1));
+    printf("ilog2(%d) = %d\n", 2, ilog2(2));
+    printf("ilog2(%d) = %d\n", 3, ilog2(3));
+    printf("ilog2(%d) = %d\n", 4, ilog2(4));
+    printf("ilog2(%d) = %d\n", 15, ilog2(15));
+    printf("ilog2(%d) = %d\n", 16, ilog2(16));
     return 0;
 }
 
