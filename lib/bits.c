@@ -277,9 +277,15 @@ int isPositive(int x) {
  */
 int isLessOrEqual(int x, int y) {
     int signx = x >> 31;
+    int signy = y >> 31;
+    int yPosXNeg = (!signy) & (!!signx);
+    int xySame = !(signx ^ signy);
+    int min = 1 << 31;
+    int yMax = !(y ^ (min + ~0));
+    int xMin = !(x ^ min);
     int negx = (~(x + signx)) + !signx;
     int sub = y + negx;
-    return !(sub >> 31);
+    return yPosXNeg | xMin | yMax | (xySame && (!(sub >> 31)));
 }
 
 /*

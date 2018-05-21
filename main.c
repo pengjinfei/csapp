@@ -69,10 +69,13 @@ int main() {
     printf("isPositive(%d) = %d\n", 1, isPositive(1));
     printf("isPositive(%d) = %d\n", -1, isPositive(-1));
 
-    printf("divpwr2(%d,%d) = %d\n", 0, 1, isLessOrEqual(0, 1));
-    printf("divpwr2(%d,%d) = %d\n", 1, 1, isLessOrEqual(1, 1));
-    printf("divpwr2(%d,%d) = %d\n", 0, -1, isLessOrEqual(0, -1));
-    printf("divpwr2(%d,%d) = %d\n", -1, 1, isLessOrEqual(-1, 1));
+    printf("isLessOrEqual(%d,%d) = %d\n", 0, 1, isLessOrEqual(0, 1));
+    printf("isLessOrEqual(%d,%d) = %d\n", 1, 1, isLessOrEqual(1, 1));
+    printf("isLessOrEqual(%d,%d) = %d\n", 0, -1, isLessOrEqual(0, -1));
+    printf("isLessOrEqual(%d,%d) = %d\n", 1, -1, isLessOrEqual(1, -1));
+    printf("isLessOrEqual(%d,%d) = %d\n", -1, 1, isLessOrEqual(-1, 1));
+    printf("isLessOrEqual(%d,%d) = %d\n", -2, -1, isLessOrEqual(-2, -1));
+    printf("isLessOrEqual(%d,%d) = %d\n", 0x80000000, 0x7fffffff, isLessOrEqual(0x80000000, 0x7fffffff));
 
     printf("bang(%d) = %d\n", 1, bang(1));
     printf("bang(%d) = %d\n", 0, bang(0));
