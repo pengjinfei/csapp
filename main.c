@@ -60,7 +60,7 @@ int main() {
     printf("fitsBits(%d,%d) = %d\n", -4, 3, fitsBits(-4, 3));
     printf("fitsBits(%d,%d) = %d\n", 0, 0, fitsBits(0, 0));
     printf("fitsBits(%d,%d) = %d\n", 1, 1, fitsBits(1, 1));
-    printf("fitsBits(%d,%d) = %d\n", -1, -1, fitsBits(-1, -1));
+    printf("fitsBits(%d,%d) = %d\n", 0x80000000, 32, fitsBits(0x80000000, 32));
 
     printf("divpwr2(%d,%d) = %d\n", 15, 1, divpwr2(15, 1));
     printf("divpwr2(%d,%d) = %d\n",-33, 4, divpwr2(-33, 4));

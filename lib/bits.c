@@ -227,6 +227,9 @@ int tmin(void) {
  */
 // 使用符号位生成偏移量
 int fitsBits(int x, int n) {
+//    int c; //another solution
+//    c = 33 + ~n;  //c = 33 + ~n = 33 + (-n - 1) = 32 - n
+//    return  = !(((x << c)>>c)^x);
     int sign = x >> 31;
     n = n + sign;
     return !((x >> n) ^ sign);
@@ -317,7 +320,11 @@ int ilog2(int x) {
  *   Rating: 2
  */
 unsigned float_neg(unsigned uf) {
-    return 2;
+    unsigned res = uf ^(1 << 31);
+    unsigned tmp = uf & (0x7fffffff);
+    if(tmp > 0x7f800000)//此时是NaN
+        res = uf;
+    return res;
 }
 
 /*
@@ -330,6 +337,7 @@ unsigned float_neg(unsigned uf) {
  *   Rating: 4
  */
 unsigned float_i2f(int x) {
+
     return 2;
 }
 
