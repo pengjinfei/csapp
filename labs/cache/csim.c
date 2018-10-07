@@ -112,7 +112,6 @@ int main(int argc, char *argv[]) {
     char mode_str[2];
     int addr;
     int bytes;
-    int shift;
     int index;
     int tag;
     int time_stamp = 0;
@@ -131,7 +130,7 @@ int main(int argc, char *argv[]) {
             }
             continue;
         }
-        shift = get_b(&addr);
+        get_b(&addr);
 //        printf(" b=%d ", shift);
         index = get_s(&addr);
 //        printf(" s=%d", index);
