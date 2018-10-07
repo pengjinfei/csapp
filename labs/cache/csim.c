@@ -11,7 +11,7 @@
 
 struct cache_line {
     int valid;
-    int tag;
+    unsigned long tag;
     int time_stamp;
 };
 
@@ -21,16 +21,16 @@ static int b = 0;
 static int s = 0;
 static int e = 0;
 
-static int get_b(int *addr) {
-    int temp = *addr;
+static int get_b(unsigned long *addr) {
+    unsigned long temp = *addr;
     temp = temp & b_mask;
     *addr = *addr >> b;
     return temp;
 }
 
 
-static int get_s(int *addr) {
-    int temp = *addr;
+static int get_s(unsigned long *addr) {
+    unsigned long temp = *addr;
     temp = temp & s_mask;
     *addr = *addr >> s;
     return temp;
@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
                 break;
             case 't':
                 strcpy(fileName, optarg);
-                printf("fileName is %s.\n", fileName);
+//                printf("fileName is %s.\n", fileName);
                 break;
             default:
                 printf("Not a valid argument.\n");
@@ -110,25 +110,22 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     char mode_str[2];
-    int addr;
+    unsigned long addr;
     int bytes;
     int index;
-    int tag;
+    unsigned long tag;
     int time_stamp = 0;
 
     int misses = 0;
     int hits = 0;
     int evictions = 0;
     while ((fscanf(fp, "%1s", mode_str) == 1)) {
-        fscanf(fp, "%x,%d", &addr, &bytes);
-        if (vFlag) {
-            printf("%s %x,%d", mode_str, addr, bytes);
-        }
+        fscanf(fp, "%lx,%d", &addr, &bytes);
         if (mode_str[0] == 'I') {
-            if(vFlag){
-                printf("\n");
-            }
             continue;
+        }
+        if (vFlag) {
+            printf("%s %lx,%d", mode_str, addr, bytes);
         }
         get_b(&addr);
 //        printf(" b=%d ", shift);
