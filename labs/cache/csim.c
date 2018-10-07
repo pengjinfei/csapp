@@ -38,30 +38,39 @@ static int get_s(int *addr) {
 
 int main(int argc, char *argv[]) {
     int ch;
-    int fFlag = 0;
     int vFlag = 0;
     char fileName[SLEN];
     while ((ch = getopt(argc, argv, "hvs:E:b:t:")) != -1) {
         switch (ch) {
             case 'h':
-                fFlag = 1;
-                printf("fFlag is %d.\n", fFlag);
-                break;
+                printf("Usage: ./csim-ref [-hv] -s <num> -E <num> -b <num> -t <file>\n"
+                       "Options:\n"
+                       "  -h         Print this help message.\n"
+                       "  -v         Optional verbose flag.\n"
+                       "  -s <num>   Number of set index bits.\n"
+                       "  -E <num>   Number of lines per set.\n"
+                       "  -b <num>   Number of block offset bits.\n"
+                       "  -t <file>  Trace file.\n"
+                       "\n"
+                       "Examples:\n"
+                       "  linux>  ./csim-ref -s 4 -E 1 -b 4 -t traces/yi.trace\n"
+                       "  linux>  ./csim-ref -v -s 8 -E 2 -b 4 -t traces/yi.trace");
+                exit(EXIT_SUCCESS);
             case 'v':
                 vFlag = 1;
-                printf("vFlag is %d.\n", vFlag);
+//                printf("vFlag is %d.\n", vFlag);
                 break;
             case 's':
                 s = atoi(optarg);
-                printf("s is %d.\n", s);
+//                printf("s is %d.\n", s);
                 break;
             case 'E':
                 e = atoi(optarg);
-                printf("E is %d.\n", e);
+//                printf("E is %d.\n", e);
                 break;
             case 'b':
                 b = atoi(optarg);
-                printf("b is %d.\n", b);
+//                printf("b is %d.\n", b);
                 break;
             case 't':
                 strcpy(fileName, optarg);
@@ -78,19 +87,16 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     s_mask = (1 << s) - 1;
-    printf("s_mask is %d.\n", s_mask);
     if (b <= 0) {
         printf("b is needed.");
         exit(EXIT_FAILURE);
     }
     b_mask = (1 << b) - 1;
-    printf("b_mask is %d.\n", b_mask);
     if (e <= 0) {
         printf("E is needed.");
         exit(EXIT_FAILURE);
     }
     int size = (1 << s) * e;
-    printf("size=%d.\n", size);
     struct cache_line *cache;
     cache = malloc(size * sizeof(struct cache_line));
     for (int j = 0; j < size; ++j) {
@@ -116,9 +122,13 @@ int main(int argc, char *argv[]) {
     int evictions = 0;
     while ((fscanf(fp, "%1s", mode_str) == 1)) {
         fscanf(fp, "%x,%d", &addr, &bytes);
-        printf("%s %x,%d", mode_str, addr, bytes);
+        if (vFlag) {
+            printf("%s %x,%d", mode_str, addr, bytes);
+        }
         if (mode_str[0] == 'I') {
-            printf("\n");
+            if(vFlag){
+                printf("\n");
+            }
             continue;
         }
         shift = get_b(&addr);
@@ -141,7 +151,9 @@ int main(int argc, char *argv[]) {
             }
 //            printf(" cache[%d].valid=%d", index + i, cache[index + i].valid);
             if (cache[index + i].tag == tag) {
-                printf(" hit\n");
+                if (vFlag) {
+                    printf(" hit");
+                }
                 hits++;
                 found = 1;
                 break;
@@ -153,25 +165,29 @@ int main(int argc, char *argv[]) {
         }
         if (!found) {
             misses++;
-            printf(" miss");
+            if (vFlag) {
+                printf(" miss");
+            }
             if (found_empty == -1) {
                 evictions++;
-                printf(" eviction");
+                if (vFlag) {
+                    printf(" eviction");
+                }
                 cache[max_index].time_stamp = time_stamp;
                 cache[max_index].tag = tag;
-                if (mode_str[0] == 'M') {
-                    hits++;
-                    printf(" hit");
-                }
             } else {
                 cache[found_empty].time_stamp = time_stamp;
                 cache[found_empty].tag = tag;
                 cache[found_empty].valid = 1;
-                if (mode_str[0] == 'M') {
-                    hits++;
-                    printf(" hit");
-                }
             }
+        }
+        if (mode_str[0] == 'M') {
+            hits++;
+            if (vFlag) {
+                printf(" hit");
+            }
+        }
+        if (vFlag) {
             printf("\n");
         }
     }
