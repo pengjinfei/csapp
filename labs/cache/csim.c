@@ -6,6 +6,7 @@
 #include <string.h>
 
 #define SLEN 81
+#define TLEN 81
 
 typedef struct
 {
@@ -50,9 +51,21 @@ int main(int argc, char * argv[])
                 printf("fileName is %s.\n",fileName);
                 break;
             default:
+                printf("Not a valid argument.\n");
+                exit(EXIT_FAILURE);
                 break;
         }
     }
+    FILE *fp;
+    if ((fp = fopen(fileName, "r")) == NULL) {
+        printf("Can't open file %s.\n", fileName);
+        exit(EXIT_FAILURE);
+    }
+    char line[TLEN];
+    while ((fscanf(fp, "%14s", line) == 1)) {
+        printf("get input %s.\n", line);
+    }
+    fclose(fp);
 //    printSummary(0, 0, 0);
     return 0;
 }
