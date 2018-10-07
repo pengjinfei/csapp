@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
         time_stamp++;
         int found = 0;
         int found_empty = -1;
-        int max_stamp = INT_MIN;
+        int max_stamp = INT_MAX;
         int max_index = index;
         for (int i = 0; i < e; i++) {
             if (cache[index + i].valid == 0) {
@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
                 found = 1;
                 break;
             }
-            if (found_empty == -1 && max_stamp < cache[index + i].time_stamp) {
+            if (found_empty == -1 && max_stamp > cache[index + i].time_stamp) {
                 max_stamp = cache[index + i].time_stamp;
                 max_index = index + i;
             }
