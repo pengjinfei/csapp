@@ -150,6 +150,7 @@ int main(int argc, char *argv[]) {
                 if (vFlag) {
                     printf(" hit");
                 }
+                cache[index + i].time_stamp = time_stamp;
                 hits++;
                 found = 1;
                 break;
