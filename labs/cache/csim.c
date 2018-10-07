@@ -4,35 +4,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 #define SLEN 81
 #define TLEN 81
 
-typedef struct
-{
+struct cache_line {
     int valid;
     int tag;
     int time_stamp;
-} cache_line;
+};
 
-int main(int argc, char * argv[])
-{
+static int b_mask;
+static int s_mask;
+static int b = 0;
+static int s = 0;
+static int e = 0;
+
+static int get_b(int *addr) {
+    int temp = *addr;
+    temp = temp & b_mask;
+    *addr = *addr >> b;
+    return temp;
+}
+
+
+static int get_s(int *addr) {
+    int temp = *addr;
+    temp = temp & s_mask;
+    *addr = *addr >> s;
+    return temp;
+}
+
+int main(int argc, char *argv[]) {
     int ch;
     int fFlag = 0;
     int vFlag = 0;
-    int s = 0;
-    int e = 0;
-    int b = 0;
     char fileName[SLEN];
-    while((ch=getopt(argc,argv,"hvs:E:b:t:"))!=-1) {
+    while ((ch = getopt(argc, argv, "hvs:E:b:t:")) != -1) {
         switch (ch) {
             case 'h':
                 fFlag = 1;
-                printf("fFlag is %d.\n",fFlag);
+                printf("fFlag is %d.\n", fFlag);
                 break;
             case 'v':
                 vFlag = 1;
-                printf("vFlag is %d.\n",vFlag);
+                printf("vFlag is %d.\n", vFlag);
                 break;
             case 's':
                 s = atoi(optarg);
@@ -47,25 +64,120 @@ int main(int argc, char * argv[])
                 printf("b is %d.\n", b);
                 break;
             case 't':
-                strcpy(fileName,optarg);
-                printf("fileName is %s.\n",fileName);
+                strcpy(fileName, optarg);
+                printf("fileName is %s.\n", fileName);
                 break;
             default:
                 printf("Not a valid argument.\n");
                 exit(EXIT_FAILURE);
-                break;
         }
+
+    }
+    if (s <= 0) {
+        printf("s is needed.");
+        exit(EXIT_FAILURE);
+    }
+    s_mask = (1 << s) - 1;
+    printf("s_mask is %d.\n", s_mask);
+    if (b <= 0) {
+        printf("b is needed.");
+        exit(EXIT_FAILURE);
+    }
+    b_mask = (1 << b) - 1;
+    printf("b_mask is %d.\n", b_mask);
+    if (e <= 0) {
+        printf("E is needed.");
+        exit(EXIT_FAILURE);
+    }
+    int size = (1 << s) * e;
+    printf("size=%d.\n", size);
+    struct cache_line *cache;
+    cache = malloc(size * sizeof(struct cache_line));
+    for (int j = 0; j < size; ++j) {
+        cache[j].valid = 0;
+        cache[j].tag = -1;
+        cache[j].time_stamp = -1;
     }
     FILE *fp;
     if ((fp = fopen(fileName, "r")) == NULL) {
         printf("Can't open file %s.\n", fileName);
         exit(EXIT_FAILURE);
     }
-    char line[TLEN];
-    while ((fscanf(fp, "%14s", line) == 1)) {
-        printf("get input %s.\n", line);
+    char mode_str[2];
+    int addr;
+    int bytes;
+    int shift;
+    int index;
+    int tag;
+    int time_stamp = 0;
+
+    int misses = 0;
+    int hits = 0;
+    int evictions = 0;
+    while ((fscanf(fp, "%1s", mode_str) == 1)) {
+        fscanf(fp, "%x,%d", &addr, &bytes);
+        printf("%s %x,%d", mode_str, addr, bytes);
+        if (mode_str[0] == 'I') {
+            printf("\n");
+            continue;
+        }
+        shift = get_b(&addr);
+//        printf(" b=%d ", shift);
+        index = get_s(&addr);
+//        printf(" s=%d", index);
+        index = index * e;
+        tag = addr;
+        time_stamp++;
+        int found = 0;
+        int found_empty = -1;
+        int max_stamp = INT_MIN;
+        int max_index = index;
+        for (int i = 0; i < e; i++) {
+            if (cache[index + i].valid == 0) {
+                if (found_empty == -1) {
+                    found_empty = index + i;
+                }
+                continue;
+            }
+//            printf(" cache[%d].valid=%d", index + i, cache[index + i].valid);
+            if (cache[index + i].tag == tag) {
+                printf(" hit\n");
+                hits++;
+                found = 1;
+                break;
+            }
+            if (found_empty == -1 && max_stamp < cache[index + i].time_stamp) {
+                max_stamp = cache[index + i].time_stamp;
+                max_index = index + i;
+            }
+        }
+        if (!found) {
+            misses++;
+            printf(" miss");
+            if (found_empty == -1) {
+                evictions++;
+                printf(" eviction");
+                cache[max_index].time_stamp = time_stamp;
+                cache[max_index].tag = tag;
+                if (mode_str[0] == 'M') {
+                    hits++;
+                    printf(" hit");
+                }
+            } else {
+                cache[found_empty].time_stamp = time_stamp;
+                cache[found_empty].tag = tag;
+                cache[found_empty].valid = 1;
+                if (mode_str[0] == 'M') {
+                    hits++;
+                    printf(" hit");
+                }
+            }
+            printf("\n");
+        }
     }
     fclose(fp);
-//    printSummary(0, 0, 0);
+    printSummary(hits, misses, evictions);
     return 0;
+
 }
+
