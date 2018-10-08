@@ -56,6 +56,14 @@ Building the TTY simulators: If you don't have Tcl/Tk installed on
 your system, then build the TTY form by commenting out all three of
 these variables (GUIMODE, TKLIBS, and TKINC) in the Makefile.
 
+********
+Note
+sudo apt-get install  flex
+sudo apt-get install  bison
+sudo apt-get install  tcl8.5-dev tk8.5-dev
+
+********
+
 Step 2: Once you've modified the Makefile to build either the GUI or
 TTY form, then you can construct the entire set of Y86-64 tools by typing 
 
@@ -94,4 +102,5 @@ ptest/
 	Automated regression testing scripts for testing processor designs.
 
 verilog/
-	System for producing Verilog designs from HCL code
+	System for producing Verilog designs from HCL codudo apt-get install bison
+
